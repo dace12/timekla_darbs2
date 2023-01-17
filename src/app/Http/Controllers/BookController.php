@@ -5,10 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Author;
+use App\Models\Categories;
+
 
 class BookController extends Controller
 {
     //
+	
+	public function __construct()
+	{
+		$this->middleware('auth');
+	}
+
 	public function list()
 	{
 		 $items = Book::orderBy('name', 'asc')->get();
@@ -21,15 +29,19 @@ class BookController extends Controller
 		 );
 	}
 	
+	
+
 	public function create()
 	{
 		 $authors = Author::orderBy('name', 'asc')->get();
+		 $categories = Categories::orderBy('name', 'asc')->get();
 		 return view(
 			 'book.form',
 			 [
 				 'title' => 'Pievienot grāmatu',
 				 'book' => new Book(),
 				 'authors' => $authors,
+				 'categories' => $categories,
 			 ]
 		 );
 	}
@@ -39,7 +51,8 @@ class BookController extends Controller
 		 $validatedData = $request->validate([
 			 'name' => 'required|min:3|max:256',
 			 'author_id' => 'required',
-			 'description' => 'nullable',
+			 'categories_id' => 'required',
+			 'description' => 'nullable',	 
 			 'price' => 'nullable|numeric',
 			 'year' => 'numeric',
 			 'image' => 'nullable|image',
@@ -48,7 +61,8 @@ class BookController extends Controller
 		 $book = new Book();
 		 $book->name = $validatedData['name'];
 		 $book->author_id = $validatedData['author_id'];
-		 $book->description = $validatedData['description'];
+		 $book->categories_id = $validatedData['categories_id'];
+		 $book->description = $validatedData['description'];	 
 		 $book->price = $validatedData['price'];
 		 $book->year = $validatedData['year'];
 		 $book->display = (bool) ($validatedData['display'] ?? false);
@@ -70,12 +84,14 @@ class BookController extends Controller
 	public function update(Book $book)
 	{
 		 $authors = Author::orderBy('name', 'asc')->get();
+		 $categories = Categories::orderBy('name', 'asc')->get();
 		 return view(
 			 'book.form',
 			 [
 				 'title' => 'Rediģēt grāmatu',
 				 'book' => $book,
 				 'authors' => $authors,
+				 'categories' => $categories,
 			 ]
 		 );
 	}
@@ -84,6 +100,7 @@ class BookController extends Controller
 		 $validatedData = $request->validate([
 			 'name' => 'required|min:3|max:256',
 			 'author_id' => 'required',
+			 'categories_id' => 'required',
 			 'description' => 'nullable',
 			 'price' => 'nullable|numeric',
 			 'year' => 'numeric',
@@ -92,6 +109,7 @@ class BookController extends Controller
 		 ]);
 		 $book->name = $validatedData['name'];
 		 $book->author_id = $validatedData['author_id'];
+		 $book->categories_id = $validatedData['categories_id'];
 		 $book->description = $validatedData['description'];
 		 $book->price = $validatedData['price'];
 		 $book->year = $validatedData['year'];

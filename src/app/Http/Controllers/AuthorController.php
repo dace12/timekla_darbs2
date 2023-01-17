@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 class AuthorController extends Controller
 {
     //
+	
+	public function __construct()
+	{
+		$this->middleware('auth');
+	}
+
 	// display all authors
 	 public function list()
 	 {

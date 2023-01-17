@@ -4,6 +4,8 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\AuthorizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,3 +40,15 @@ Route::post('/books/put', [BookController::class, 'put']);
 Route::get('/books/update/{book}', [BookController::class, 'update']);
 Route::post('/books/patch/{book}', [BookController::class, 'patch']);
 Route::post('/books/delete/{book}', [BookController::class, 'delete']);
+
+
+Route::get('/categories', [CategoriesController::class, 'list']);
+Route::get('/categories/create', [CategoriesController::class, 'create']);
+Route::post('/categories/put', [CategoriesController::class, 'put']);
+Route::get('/categories/update/{categories}', [CategoriesController::class, 'update']);
+Route::post('/categories/patch/{categories}', [CategoriesController::class, 'patch']);
+Route::post('/categories/delete/{categories}', [CategoriesController::class, 'delete']);
+
+Route::get('/login', [AuthorizationController::class, 'login'])->name('login');
+Route::post('/auth', [AuthorizationController::class, 'authenticate']);
+Route::get('/logout', [AuthorizationController::class, 'logout']);
